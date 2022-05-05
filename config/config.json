@@ -1,0 +1,169 @@
+{
+  "test-dev-1" : {
+    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/config/logconfig.ini",
+    "library_db" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/db/test_dev_db.json",
+    "ffmpeg_bin" : "/usr/bin/ffmpeg",
+    "ffprobe_bin" : "/usr/bin/ffprobe",
+    "tmp_folder" : "/tmp",
+    "tasks" : [ {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
+      "enabled" : true,
+      "params" : {
+        "update_existing" : true,
+        "remove_deleted" : true,
+        "folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/" ]
+      }
+    }, {
+      "name" : "Ensure MKV Containers",
+      "task" : "container_changer",
+      "enabled" : true,
+      "params" : {
+        "container" : "mkv"
+      }
+    }, {
+      "name" : "Transcode Audio Streams (AAC)",
+      "task" : "audio_transcoder",
+      "enabled" : true,
+      "params" : {
+        "codec" : "aac"
+      }
+    } ]
+  },
+  "test-dev-2" : {
+    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/config/logconfig.ini",
+    "library_db" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/db/test_dev_db.json",
+    "ffmpeg_bin" : "/usr/bin/ffmpeg",
+    "ffprobe_bin" : "/usr/bin/ffprobe",
+    "tmp_folder" : "/tmp",
+    "tasks" : [ {
+      "name" : "Move to Library",
+      "task" : "file_copier",
+      "enabled" : true,
+      "params" : {
+        "source_folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/_downloaded_1/", "/mnt/hd/storage/_tmp_/movie_fixer_tests/_downloaded_2/" ],
+        "destinaion_folder" : "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/_incoming/",
+        "extensions" : [ "mkv", "m4v", "mp4", "avi" ]
+      }
+    }, {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
+      "enabled" : true,
+      "params" : {
+        "update_existing" : false,
+        "remove_deleted" : true,
+        "folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/" ]
+      }
+    }, {
+      "name" : "Ensure MKV Containers",
+      "task" : "container_changer",
+      "enabled" : true,
+      "params" : {
+        "container" : "mkv"
+      }
+    }, {
+      "name" : "Clean Unwanted Streams",
+      "task" : "stream_cleaner",
+      "enabled" : true,
+      "params" : {
+        "allowed_codec_types" : [ "video", "audio" ]
+      }
+    } ]
+  },
+  "jds-devel" : {
+    "log_config_file" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/config/logconfig.ini",
+    "library_db" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/db/jds_db.json",
+    "ffmpeg_bin" : "/volume1/@appstore/ffmpeg/bin/ffmpeg",
+    "ffprobe_bin" : "/volume1/@appstore/ffmpeg/bin/ffprobe",
+    "tmp_folder" : "/volume1/@tmp",
+    "tasks" : [ {
+      "name" : "Scan Movie Library - Quick",
+      "task" : "scan_library",
+      "enabled" : true,
+      "params" : {
+        "update_existing" : false,
+        "remove_deleted" : true,
+        "folders" : [ "/volume1/Movies/999_TEST/" ]
+      }
+    }, {
+      "name" : "Ensure MKV Containers",
+      "task" : "container_changer",
+      "enabled" : false,
+      "params" : {
+        "container" : "mkv"
+      }
+    }, {
+      "name" : "Clean Unwanted Streams",
+      "task" : "stream_cleaner",
+      "enabled" : false,
+      "params" : {
+        "allowed_codec_types" : [ "video", "audio" ]
+      }
+    }, {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
+      "enabled" : false,
+      "params" : {
+        "update_existing" : true,
+        "remove_deleted" : true,
+        "folders" : [ "/volume1/Movies/999_TEST/" ]
+      }
+    } ]
+  },
+  "jds-production" : {
+    "log_config_file" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/config/logconfig.ini",
+    "library_db" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/db/jds_production.json",
+    "ffmpeg_bin" : "/volume1/@appstore/ffmpeg/bin/ffmpeg",
+    "ffprobe_bin" : "/volume1/@appstore/ffmpeg/bin/ffprobe",
+    "tmp_folder" : "/volume1/@tmp",
+    "tasks" : [ {
+      "name" : "Move to Library",
+      "task" : "file_copier",
+      "enabled" : true,
+      "params" : {
+        "source_folders" : [ "/volume1/homes/jackisback/Download", "/volume1/homes/erika/Download" ],
+        "destinaion_folder" : "/volume1/Movies/001_NEW/_incoming",
+        "extensions" : [ "mkv", "m4v", "mp4", "avi" ]
+      }
+    }, {
+      "name" : "Scan Movie Library - Quick",
+      "task" : "scan_library",
+      "enabled" : true,
+      "params" : {
+        "update_existing" : false,
+        "remove_deleted" : true,
+        "folders" : [ "/volume1/Movies/001_NEW/" ]
+      }
+    }, {
+      "name" : "Ensure MKV Containers",
+      "task" : "container_changer",
+      "enabled" : true,
+      "params" : {
+        "container" : "mkv"
+      }
+    }, {
+      "name" : "Clean Unwanted Streams",
+      "task" : "stream_cleaner",
+      "enabled" : true,
+      "params" : {
+        "allowed_codec_types" : [ "video", "audio" ]
+      }
+    }, {
+      "name" : "Transcode Audio Streams (AAC)",
+      "task" : "audio_transcoder",
+      "enabled" : true,
+      "params" : {
+        "codec" : "aac"
+      }
+    }, {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
+      "enabled" : false,
+      "params" : {
+        "update_existing" : true,
+        "remove_deleted" : true,
+        "folders" : [ "/volume1/Movies/001_NEW/" ]
+      }
+    } ]
+  }
+}
