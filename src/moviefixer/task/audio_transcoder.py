@@ -2,7 +2,7 @@
 Copyright: Copyright (c) 2022., Adam Jakab
 
 @author: Adam Jakab <adam at jakab dot pro>
-@created: 23/4/2022, 10:19 AM
+@created: 23/4/2022
 @license: See LICENSE.txt
 
 @summary: Converts all audio streams to the required format and sets the stream title accordingly.
@@ -37,7 +37,7 @@ class AudioTranscoderTask(Task):
             self.__verify_item(md)
                 
         log("Done.")
-        
+    
     def __verify_item(self, md):
         transcode_streams = []
         
@@ -72,20 +72,21 @@ class AudioTranscoderTask(Task):
         library.registerMovieData(md)
     
     def __getStreamTitle(self, lang_code:string, codec):
-        try:
-            iso639Lang = languages.get(part3=lang_code)
-            language = iso639Lang.name
-        except KeyError:
+        language = "Unknown"
+        if lang_code and lang_code.strip():
             try:
-                iso639Lang = languages.get(part2b=lang_code)
+                iso639Lang = languages.get(part3=lang_code)
                 language = iso639Lang.name
             except KeyError:
                 try:
-                    iso639Lang = languages.get(part1=lang_code)
+                    iso639Lang = languages.get(part2b=lang_code)
                     language = iso639Lang.name
                 except KeyError:
-                    log_debug("No match found for ISO-639 language with code: '%s'", lang_code)
-                    language = "Unknown"
+                    try:
+                        iso639Lang = languages.get(part1=lang_code)
+                        language = iso639Lang.name
+                    except KeyError:
+                        log_debug("No match found for ISO-639 language with code: '%s'", lang_code)
         
         answer = "{} ({})".format(language, codec.upper())
         return answer
