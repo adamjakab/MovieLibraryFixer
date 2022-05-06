@@ -72,7 +72,8 @@ class MovieItem(object):
             '-fflags', '+genpts+igndts',
             '-y', 
             '-i', self.__original_file_path,
-            '-c:v', 'copy', 
+            '-c:v', 'copy',
+            '-c:a', 'copy',
             '-map', '0',
         ]
         # "-c:0 aac -metadata:s:0 title=Italiano (AAC)

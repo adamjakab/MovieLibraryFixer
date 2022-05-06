@@ -4,6 +4,8 @@ Copyright: Copyright (c) 2022., Adam Jakab
 @author: Adam Jakab <adam at jakab dot pro>
 @created: 23/4/2022, 10:19 AM
 @license: See LICENSE.txt
+
+@summary: Converts all audio streams to the required format and sets the stream title accordingly.
 '''
 
 import json
@@ -13,10 +15,11 @@ from moviefixer.movieitem import MovieItem
 from moviefixer.logger import log, log_debug, log_info, log_warn, log_error
 import string
 
+
 class AudioTranscoderTask(Task):
+
     def __init__(self, library):
         super(AudioTranscoderTask, self).__init__(library)
-        
         
     def configure(self, params):
         self.__config = params
@@ -24,7 +27,6 @@ class AudioTranscoderTask(Task):
             raise Exception("Configuration parameter 'codec' is not defined.")
         
         log_debug("Configured: %s", json.dumps(self.__config)) 
-
 
     def run(self):
         log("Running...")
@@ -36,9 +38,8 @@ class AudioTranscoderTask(Task):
                 
         log("Done.")
         
-        
     def __verify_item(self, md):
-        transcodable_stream_indices = []
+        transcode_streams = []
         
         for stream in md["streams"]:
             if stream["codec_type"] == "audio":
@@ -52,14 +53,15 @@ class AudioTranscoderTask(Task):
                     else:
                         stream_codec = "copy"
                         
-                    transcodable_stream_indices.append([stream_index, stream_codec, stream_title])
+                    transcode_streams.append([stream_index, stream_codec, stream_title])
                 
-        if (len(transcodable_stream_indices) == 0):
+        if (len(transcode_streams) == 0):
             return 
         
         mi = MovieItem(md["path"])
+        log("Movie '%s' need audio transcoding for streams: %s", md["title"], transcode_streams)
         try:
-            mi.transcodeAudioStreamsByIndex(transcodable_stream_indices)
+            mi.transcodeAudioStreamsByIndex(transcode_streams)
         except RuntimeError as err:
                 log_debug("Error removing streams! %s Skipping.", err)
                 
@@ -68,7 +70,6 @@ class AudioTranscoderTask(Task):
         md = mi.getMovieData()
         library = self.getLibrary()                 
         library.registerMovieData(md)
-    
     
     def __getStreamTitle(self, lang_code:string, codec):
         try:
