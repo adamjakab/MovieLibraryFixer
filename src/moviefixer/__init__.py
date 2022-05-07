@@ -37,44 +37,52 @@ class Moviefixer:
         
         log("Done.")
     
-    #===========================================================================
-    # Use this: https://fedingo.com/how-to-stop-python-code-after-certain-amount-of-time/
-    #===========================================================================
+
     def __runTasks(self):
         interrupt_requested = False
         task_count = len(self.__task_registry)
-        run_count = 0
         error_count = 0
+        i = 0
         log("Running %s tasks...", task_count)
         
-        for task_item in self.__task_registry:
-            run_count = run_count + 1
-            task_instance = task_item["instance"]
-            task_name = task_item["task"]
-            if ("name" in task_item):
-                task_name = "{}({})".format(task_item["name"], task_item["task"])
-            # config = self.__task_registry[task_name]["config"]
-            params = {}
-            if "params" in task_item:
-                params = task_item["params"]
-            log("Running task[%s/%s]: %s", run_count, task_count, task_name)
-            
+        while i < task_count:
             try:
-                task_instance.configure(params)
-                task_instance.run()
+                self.__runTask(i)
+                i = i + 1
             except KeyboardInterrupt:
                 interrupt_requested = True
                 break
-            except BaseException as err:
-                log_error('Task module error[%s]: %s', task_name, err)
+            except Exception as err:
+                log_error('Task module error: %s', err)
                 log_debug("Exception: %s", traceback.format_exc())
                 error_count = error_count + 1
-                continue
-            
+        
         if interrupt_requested:
-            raise RuntimeError("Interrupted")
+            raise RuntimeError("User interrupt.")
         
         log("All tasks finished running (Errors: %s).", error_count)
+    
+    
+    #===========================================================================
+    # Use this: https://fedingo.com/how-to-stop-python-code-after-certain-amount-of-time/
+    #===========================================================================
+    def __runTask(self, task_index):
+        task_item = self.__task_registry[task_index]
+        task_count = len(self.__task_registry)
+        run_count = task_index + 1
+        task_instance = task_item["instance"]
+        task_name = task_item["task"]
+        if ("name" in task_item):
+            task_name = "{}({})".format(task_item["name"], task_item["task"])
+        
+        params = {}
+        if "params" in task_item:
+            params = task_item["params"]
+        log("Running task[%s/%s]: %s", run_count, task_count, task_name)
+        
+        task_instance.configure(params)
+        task_instance.run()
+        
     
     def __setup_task_registry(self):
         log("Setting up task registry...")
