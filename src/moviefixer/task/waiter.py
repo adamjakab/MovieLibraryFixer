@@ -18,11 +18,16 @@ import time
 
 class WaiterTask(Task):
 
-    def __init__(self, library):
-        super(WaiterTask, self).__init__(library)
+    def __init__(self, library, stop_event):
+        super(WaiterTask, self).__init__(library, stop_event)
         
     def configure(self, params):
         self.__config = params
+        if "iterations" not in self.__config:
+            raise Exception("Configuration parameter 'iterations' is not defined.")
+        if "wait_time" not in self.__config:
+            raise Exception("Configuration parameter 'wait_time' is not defined.")
+        
         log_debug("Configured: %s", json.dumps(self.__config)) 
         
 
@@ -30,9 +35,11 @@ class WaiterTask(Task):
         log("Running...")
         i = 0
         while i < self.__config["iterations"]:
+            if self.isStopRequested():
+                log_info("Task stopped.")
+                break;
             i = i + 1
             self.__do_iteration(i)
-            
                 
         log("Done.")
     

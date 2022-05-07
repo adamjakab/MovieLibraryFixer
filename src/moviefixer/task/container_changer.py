@@ -14,8 +14,8 @@ from moviefixer.logger import log, log_debug, log_info, log_warn, log_error
 
 class ContainerChangerTask(Task):
 
-    def __init__(self, library):
-        super(ContainerChangerTask, self).__init__(library)
+    def __init__(self, library, stop_event):
+        super(ContainerChangerTask, self).__init__(library, stop_event)
         
         
     def configure(self, params):
@@ -31,6 +31,9 @@ class ContainerChangerTask(Task):
         library = self.getLibrary()
         movieDataItems = library.getAllItems()
         for md in movieDataItems:
+            if self.isStopRequested():
+                log_info("Task stopped.")
+                break;
             self.__verify_item(md)
                 
         log("Done.")
@@ -42,6 +45,8 @@ class ContainerChangerTask(Task):
             return
             
         mi = MovieItem(md["path"])
+        log_debug("Changing container '%s' -> '%s' for movie '%s'.", file_extension, self.__config["container"], md["title"])
+        
         try:
             mi.changeMovieContainer(self.__config["container"])
         except Exception as err:

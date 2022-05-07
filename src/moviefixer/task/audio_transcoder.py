@@ -18,8 +18,8 @@ import string
 
 class AudioTranscoderTask(Task):
 
-    def __init__(self, library):
-        super(AudioTranscoderTask, self).__init__(library)
+    def __init__(self, library, stop_event):
+        super(AudioTranscoderTask, self).__init__(library, stop_event)
         
     def configure(self, params):
         self.__config = params
@@ -34,6 +34,9 @@ class AudioTranscoderTask(Task):
         library = self.getLibrary()
         movieDataItems = library.getAllItems()
         for md in movieDataItems:
+            if self.isStopRequested():
+                log_info("Task stopped.")
+                break;
             self.__verify_item(md)
                 
         log("Done.")

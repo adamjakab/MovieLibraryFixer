@@ -5,23 +5,23 @@
     "ffmpeg_bin" : "/usr/bin/ffmpeg",
     "ffprobe_bin" : "/usr/bin/ffprobe",
     "tmp_folder" : "/tmp",
-    "max_process_time": 30,
-    "process_overtime_strategy": "interrupt",
+    "max_process_time": 7,
+    "process_overtime_strategy": "end_task",
     "tasks" : [ {
       "name" : "Wait Module #1",
       "task" : "waiter",
       "enabled" : true,
       "params" : {
-        "iterations" : 5,
-        "wait_time" : 2
+        "iterations" : 10,
+        "wait_time" : 5
       }
     }, {
       "name" : "Wait Module #2",
       "task" : "waiter",
       "enabled" : true,
       "params" : {
-        "iterations" : 10,
-        "wait_time" : 1
+        "iterations" : 3,
+        "wait_time" : 10
       }
     } ]
   },

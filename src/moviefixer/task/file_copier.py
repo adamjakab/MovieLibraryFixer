@@ -17,8 +17,8 @@ import shutil
 
 class FileCopierTask(Task):
 
-    def __init__(self, library):
-        super(FileCopierTask, self).__init__(library)
+    def __init__(self, library, stop_event):
+        super(FileCopierTask, self).__init__(library, stop_event)
         
         
     def configure(self, params):

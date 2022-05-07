@@ -15,8 +15,8 @@ class ScanLibraryTask(Task):
     __all_movie_extensions = ['.avi', '.divx', '.m4v', '.mkv', '.mp4']
     __non_mkv_movie_extensions = ['.avi', '.divx', '.m4v', '.mp4']
 
-    def __init__(self, library):
-        super(ScanLibraryTask, self).__init__(library)
+    def __init__(self, library, stop_event):
+        super(ScanLibraryTask, self).__init__(library, stop_event)
         
         
     def configure(self, params):
