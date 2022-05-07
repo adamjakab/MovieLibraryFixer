@@ -5,6 +5,8 @@
     "ffmpeg_bin" : "/usr/bin/ffmpeg",
     "ffprobe_bin" : "/usr/bin/ffprobe",
     "tmp_folder" : "/tmp",
+    "max_process_time": 30,
+    "process_overtime_strategy": "interrupt",
     "tasks" : [ {
       "name" : "Scan Movie Library - Full",
       "task" : "scan_library",
@@ -13,20 +15,6 @@
         "update_existing" : true,
         "remove_deleted" : true,
         "folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/" ]
-      }
-    }, {
-      "name" : "Ensure MKV Containers",
-      "task" : "container_changer",
-      "enabled" : true,
-      "params" : {
-        "container" : "mkv"
-      }
-    }, {
-      "name" : "Transcode Audio Streams (AAC)",
-      "task" : "audio_transcoder",
-      "enabled" : true,
-      "params" : {
-        "codec" : "aac"
       }
     } ]
   },
@@ -60,6 +48,13 @@
       "enabled" : true,
       "params" : {
         "container" : "mkv"
+      }
+    }, {
+      "name" : "Transcode Audio Streams (AAC)",
+      "task" : "audio_transcoder",
+      "enabled" : true,
+      "params" : {
+        "codec" : "aac"
       }
     }, {
       "name" : "Clean Unwanted Streams",

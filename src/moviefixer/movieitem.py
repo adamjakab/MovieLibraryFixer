@@ -145,7 +145,7 @@ class MovieItem(object):
             moviePath = self.__original_file_path
 
         md = self.getMovieFormatData(moviePath)
-        # log_debug("Movie Format Data: %s", json.dumps(md, indent=2, sort_keys=True))
+        #log_debug("Movie Format Data: %s", json.dumps(md, indent=2, sort_keys=True))
 
         answer = {
             'id': self.getIdTag(),
@@ -154,29 +154,38 @@ class MovieItem(object):
             'bit_rate': int(self.__getSpecificKeyFromMovieData(md, "format.bit_rate")),
             'duration': int(float(self.__getSpecificKeyFromMovieData(md, "format.duration"))),
             'format_name': self.__getSpecificKeyFromMovieData(md, "format.format_name"),
+            'format_long_name': self.__getSpecificKeyFromMovieData(md, "format.format_long_name"),
             'size': int(self.__getSpecificKeyFromMovieData(md, "format.size")),
-            'codec_name': self.__getSpecificKeyFromMovieData(md, "streams.0.codec_name"),
-            'width': self.__getSpecificKeyFromMovieData(md, "streams.0.width"),
-            'height': self.__getSpecificKeyFromMovieData(md, "streams.0.height"),
-            'coded_width': self.__getSpecificKeyFromMovieData(md, "streams.0.coded_width"),
-            'coded_height': self.__getSpecificKeyFromMovieData(md, "streams.0.coded_height"),
-            'display_aspect_ratio': self.__getSpecificKeyFromMovieData(md, "streams.0.display_aspect_ratio"),
             'streams': []
         }
         
         streams:list = self.__getSpecificKeyFromMovieData(md, "streams")
         for stream in streams:
+            codec_type = self.__getSpecificKeyFromMovieData(stream, "codec_type")
             md_stream = {
                 'index': self.__getSpecificKeyFromMovieData(stream, "index"),
-                'codec_type': self.__getSpecificKeyFromMovieData(stream, "codec_type"),
+                'codec_type': codec_type,
                 'codec_name': self.__getSpecificKeyFromMovieData(stream, "codec_name"),
                 'codec_long_name': self.__getSpecificKeyFromMovieData(stream, "codec_long_name"),
-                'language': self.__getSpecificKeyFromMovieData(stream, "tags.language"),
-                'title': self.__getSpecificKeyFromMovieData(stream, "tags.title")
+                'profile': self.__getSpecificKeyFromMovieData(stream, "profile"),
             }
+            
+            if codec_type == "video":
+                md_stream['width'] = self.__getSpecificKeyFromMovieData(stream, "width")
+                md_stream['height'] = self.__getSpecificKeyFromMovieData(stream, "height")
+                md_stream['coded_width'] = self.__getSpecificKeyFromMovieData(stream, "coded_width")
+                md_stream['coded_height'] = self.__getSpecificKeyFromMovieData(stream, "coded_height")
+                md_stream['display_aspect_ratio'] = self.__getSpecificKeyFromMovieData(stream, "display_aspect_ratio")
+            elif codec_type == "audio":
+                md_stream['language'] = self.__getSpecificKeyFromMovieData(stream, "tags.language")
+                md_stream['channels'] = self.__getSpecificKeyFromMovieData(stream, "channels")
+                md_stream['sample_rate'] = self.__getSpecificKeyFromMovieData(stream, "sample_rate")
+                md_stream['title'] = self.__getSpecificKeyFromMovieData(stream, "tags.title")
+            
+            
             answer['streams'].append(md_stream)
         
-        # log_debug("Movie Data: %s", json.dumps(answer, indent=2, sort_keys=False))
+        #log_debug("Movie Data: %s", json.dumps(answer, indent=2, sort_keys=False))
 
         return answer
     

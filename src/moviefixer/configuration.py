@@ -26,7 +26,6 @@ def getConfig():
     return __configuration
 
 def load_configuration(config_file, mode):
-    print(">>>LOADING CONF")
     global __configuration
     f = open(config_file)
     data = json.load(f)

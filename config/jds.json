@@ -1,0 +1,28 @@
+{
+  "quick" : {
+    "log_config_file" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/config/logconfig.ini",
+    "library_db" : "/var/services/homes/jackisback/Projects/Python/MovieFixer/db/jds_production.json",
+    "ffmpeg_bin" : "/volume1/@appstore/ffmpeg/bin/ffmpeg",
+    "ffprobe_bin" : "/volume1/@appstore/ffmpeg/bin/ffprobe",
+    "tmp_folder" : "/volume1/@tmp",
+    "tasks" : [ {
+      "name" : "Move to Library",
+      "task" : "file_copier",
+      "enabled" : true,
+      "params" : {
+        "source_folders" : [ "/volume1/homes/jackisback/Download", "/volume1/homes/erika/Download" ],
+        "destinaion_folder" : "/volume1/Movies/001_NEW/_incoming",
+        "extensions" : [ "mkv", "m4v", "mp4", "avi" ]
+      }
+    }, {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
+      "enabled" : true,
+      "params" : {
+        "update_existing" : true,
+        "remove_deleted" : true,
+        "folders" : [ "/volume1/Movies/001_NEW/" ]
+      }
+    } ]
+  }
+}

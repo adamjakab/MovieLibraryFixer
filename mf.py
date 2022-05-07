@@ -1,8 +1,12 @@
 #!/usr/bin/env python3
 '''
-Created on 23 Apr 2022
+Copyright: Copyright (c) 2022., Adam Jakab
 
-@author: jackisback
+@author: Adam Jakab <adam at jakab dot pro>
+@created: 23/4/2022
+@license: See LICENSE.txt
+
+@summary: Main entry point for MovieFixer
 '''
 
 import sys
