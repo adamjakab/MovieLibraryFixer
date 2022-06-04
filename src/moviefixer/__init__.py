@@ -91,7 +91,7 @@ class Moviefixer:
         task_process.start()
         
         while task_process.is_alive():
-            task_process.join(timeout=1)
+            task_process.join(timeout=10)
             if not task_process.is_alive():
                 break
             

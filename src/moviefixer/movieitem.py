@@ -146,11 +146,15 @@ class MovieItem(object):
 
         md = self.getMovieFormatData(moviePath)
         #log_debug("Movie Format Data: %s", json.dumps(md, indent=2, sort_keys=True))
-
+        
+        #this needs to be cleaned
+        movietitle = self.cleanData(self.__getSpecificKeyFromMovieData(md, "format.tags.title"))
+        log_debug("Movie Data (Title): %s", movietitle)
+        
         answer = {
             'id': self.getIdTag(),
             'path': self.__original_file_path,
-            'title': self.__getSpecificKeyFromMovieData(md, "format.tags.title"),
+            'title': movietitle,
             'bit_rate': int(self.__getSpecificKeyFromMovieData(md, "format.bit_rate")),
             'duration': int(float(self.__getSpecificKeyFromMovieData(md, "format.duration"))),
             'format_name': self.__getSpecificKeyFromMovieData(md, "format.format_name"),
@@ -180,7 +184,7 @@ class MovieItem(object):
                 md_stream['language'] = self.__getSpecificKeyFromMovieData(stream, "tags.language")
                 md_stream['channels'] = self.__getSpecificKeyFromMovieData(stream, "channels")
                 md_stream['sample_rate'] = self.__getSpecificKeyFromMovieData(stream, "sample_rate")
-                md_stream['title'] = self.__getSpecificKeyFromMovieData(stream, "tags.title")
+                md_stream['title'] = self.cleanData(self.__getSpecificKeyFromMovieData(stream, "tags.title"))
             
             
             answer['streams'].append(md_stream)
@@ -238,9 +242,16 @@ class MovieItem(object):
                 dataBlock = default
                 break
         
+        #@todo: Need to clean dataBlock!
+        
         answer = dataBlock
         return answer
     
     def getIdTag(self):
         return hashlib.md5(self.__original_file_path.encode('utf-8')).hexdigest()
 
+    def cleanData(self, incoming):
+        in_encoded = incoming.encode("ascii", "ignore")
+        in_decoded = in_encoded.decode()
+        return in_decoded
+        

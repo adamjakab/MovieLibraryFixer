@@ -7,23 +7,27 @@
     "tmp_folder" : "/tmp",
     "max_process_time": 7,
     "process_overtime_strategy": "end_task",
-    "tasks" : [ {
-      "name" : "Wait Module #1",
-      "task" : "waiter",
+    "tasks" : [
+    {
+      "name" : "Scan Movie Library - Full",
+      "task" : "scan_library",
       "enabled" : true,
       "params" : {
-        "iterations" : 10,
-        "wait_time" : 5
+        "update_existing" : true,
+        "remove_deleted" : true,
+        "folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/" ]
       }
-    }, {
-      "name" : "Wait Module #2",
-      "task" : "waiter",
+    },
+    {
+      "name" : "Folder Cleaner",
+      "task" : "empty_folder_cleaner",
       "enabled" : true,
       "params" : {
-        "iterations" : 3,
-        "wait_time" : 10
+      	"folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/", "/mnt/smb/jackisback/Movies/001_NEW/", "/mnt/smb/jackisback/Movies/002_MOVIES/"],
+        "expected_extensions" : [ "mkv", "m4v", "mp4", "avi" ]
       }
-    } ]
+    }
+    ]
   },
   "test-dev-2" : {
     "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/config/logconfig.ini",
@@ -62,6 +66,14 @@
       "enabled" : true,
       "params" : {
         "codec" : "aac"
+      }
+    },  {
+      "name" : "Wait Module #2",
+      "task" : "waiter",
+      "enabled" : true,
+      "params" : {
+        "iterations" : 3,
+        "wait_time" : 10
       }
     }, {
       "name" : "Clean Unwanted Streams",

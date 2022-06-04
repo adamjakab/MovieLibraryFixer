@@ -2,8 +2,10 @@
 Copyright: Copyright (c) 2022., Adam Jakab
 
 @author: Adam Jakab <adam at jakab dot pro>
-@created: 23/4/2022, 10:19 AM
+@created: xx/xx/2022
 @license: See LICENSE.txt
+
+@summary: Task Template
 '''
 
 import json

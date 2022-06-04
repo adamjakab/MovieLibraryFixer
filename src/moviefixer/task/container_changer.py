@@ -4,6 +4,8 @@ Copyright: Copyright (c) 2022., Adam Jakab
 @author: Adam Jakab <adam at jakab dot pro>
 @created: 23/4/2022, 10:19 AM
 @license: See LICENSE.txt
+
+@summary: Changes the movie container by copying all streams.
 '''
 
 import json
@@ -45,7 +47,7 @@ class ContainerChangerTask(Task):
             return
             
         mi = MovieItem(md["path"])
-        log_debug("Changing container '%s' -> '%s' for movie '%s'.", file_extension, self.__config["container"], md["title"])
+        log_debug("Changing container '%s' -> '%s' for movie '%s'.", file_extension, self.__config["container"], md["path"])
         
         try:
             mi.changeMovieContainer(self.__config["container"])
@@ -53,8 +55,10 @@ class ContainerChangerTask(Task):
                 log_debug("Error changing container! %s Skipping.", err)
         
         
-        # re-register updated movie data in library
-        # @todo: should remove old movie (.avi) from library which was converted
+        # Remove the original movie (.avi) from library
+        library = self.getLibrary()
+        library.deleteItemById(md["id"])
+        
+        # Register the updated movie (.mkv) in library
         md = mi.getMovieData()
-        library = self.getLibrary()                 
         library.registerMovieData(md)
