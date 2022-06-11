@@ -213,8 +213,9 @@ class MovieItem(object):
         process_out = subprocess.run(process_args, encoding='utf-8', stdout=subprocess.PIPE)
         
         if(process_out.returncode != 0):
-            log_warn("Failed to run ffmpeg process!")
-            log_debug("ffmpeg args: %s", process_args)
+            log_error("Failed to run ffmpeg process!")
+            #log_debug("ffmpeg args: %s", process_args)
+            log_debug("Try to run manually: %s %s", self.__ffmpeg_bin, ' '.join(app_args))
             raise RuntimeError("ffmpeg exec failed!")
         
     def __run_ffprobe(self, app_args):
@@ -222,7 +223,6 @@ class MovieItem(object):
         process_args = [self.__ffprobe_bin] + app_args
         process_out = subprocess.run(process_args, encoding='utf-8', stdout=subprocess.PIPE)
         if(process_out.returncode == 0):
-            # log_debug("%s", process_out.stdout)
             answer = json.loads(process_out.stdout)
 
         return answer

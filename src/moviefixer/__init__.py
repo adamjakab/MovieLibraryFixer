@@ -15,7 +15,7 @@ import traceback
 
 import moviefixer.configuration as conf
 from moviefixer.logger import log, log_debug, log_info, log_warn, log_error
-from moviefixer.movielibrary import MovieLibrary
+from moviefixer.movie_library import MovieLibrary
 from moviefixer.task import Task
 
 

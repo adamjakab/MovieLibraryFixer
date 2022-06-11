@@ -10,6 +10,7 @@ from moviefixer.task import Task
 from moviefixer.movieitem import MovieItem
 from moviefixer.logger import log, log_debug, log_info, log_warn, log_error
 
+
 class ScanLibraryTask(Task):
     __library_folders = []
     __all_movie_extensions = ['.avi', '.divx', '.m4v', '.mkv', '.mp4']
@@ -17,7 +18,6 @@ class ScanLibraryTask(Task):
 
     def __init__(self, library, stop_event):
         super(ScanLibraryTask, self).__init__(library, stop_event)
-        
         
     def configure(self, params):
         self.__config = params
@@ -43,7 +43,6 @@ class ScanLibraryTask(Task):
         self.__run_remove__()
         log("Done.")
 
-
     def __run_remove__(self):
         if(self.__config["remove_deleted"] == False):
             log_debug("Library cleanup from deleted item is disabled. Skipping")
@@ -52,27 +51,26 @@ class ScanLibraryTask(Task):
         library = self.getLibrary()
         movieDataItems = library.getAllItems()
         for md in movieDataItems:
-            #log_debug("Checking if exists: %s)", md["path"])
             try:
                 mi = MovieItem(md["path"])
+                # log_debug("Library Item Data: %s", json.dumps(md, indent=2, sort_keys=True))
             except FileNotFoundError:
                 library.deleteItemById(md["id"])
                 log_debug("Removed entry for deleted movie: %s)", md["path"])
-            
         
-    def __run_update__(self):   
+    def __run_update__(self): 
         movies = self.getAllMovieFiles()
         library = self.getLibrary()
         for movie in movies:
-            if(len(library.findItemByPath(movie)) != 1 or self.__config["update_existing"] == True):
+            if(not library.findItemByPath(movie) or self.__config["update_existing"] == True):
                 try:
-                    log_debug("Unregistered movie: %s", movie)
+                    log_debug("Updating library data for: %s", movie)
                     mi = MovieItem(movie)
-                    md = mi.getMovieData()                    
+                    md = mi.getMovieData()
+                    # log_debug("Movie Item Data: %s", json.dumps(md, indent=2, sort_keys=True))
                     library.registerMovieData(md)
                 except Exception as e:
                     log_error("Movie data exception: %s - %s", e, movie)
-        
         
     def getAllMovieFiles(self):
         movieList = []

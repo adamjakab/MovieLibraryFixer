@@ -1,7 +1,7 @@
 {
   "test-dev-1" : {
-    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/config/logconfig.ini",
-    "library_db" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/db/test_dev_db.json",
+    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Plex/MovieFixer/config/logconfig.ini",
+    "library_db" : "/tmp/dev.db",
     "ffmpeg_bin" : "/usr/bin/ffmpeg",
     "ffprobe_bin" : "/usr/bin/ffprobe",
     "tmp_folder" : "/tmp",
@@ -13,15 +13,22 @@
       "task" : "scan_library",
       "enabled" : true,
       "params" : {
-        "update_existing" : true,
+        "update_existing" : false,
         "remove_deleted" : true,
-        "folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/" ]
+        "folders_old" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/_incoming/"],
+        "folders" : [ 
+        	"/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/", 
+        	"/mnt/smb/jackisback/Movies/001_NEW/",
+        	"/mnt/smb/jackisback/Movies/002_MOVIES/",
+        	"/mnt/smb/jackisback/Movies/003_TV_SHOWS/",
+        	"/mnt/smb/jackisback/Movies/005_DOCUMENTARIES/"
+        ]
       }
     },
     {
       "name" : "Folder Cleaner",
       "task" : "empty_folder_cleaner",
-      "enabled" : true,
+      "enabled" : false,
       "params" : {
       	"folders" : [ "/mnt/hd/storage/_tmp_/movie_fixer_tests/001_NEW/", "/mnt/smb/jackisback/Movies/001_NEW/", "/mnt/smb/jackisback/Movies/002_MOVIES/"],
         "expected_extensions" : [ "mkv", "m4v", "mp4", "avi" ]
@@ -30,8 +37,8 @@
     ]
   },
   "test-dev-2" : {
-    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/config/logconfig.ini",
-    "library_db" : "/mnt/smb/jackisback/Home/Projects/Python/MovieFixer/db/test_dev_db.json",
+    "log_config_file" : "/mnt/smb/jackisback/Home/Projects/Plex/MovieFixer/config/logconfig.ini",
+    "library_db" : "/mnt/smb/jackisback/Home/Projects/Plex/MovieFixer/db/test_dev_db.json",
     "ffmpeg_bin" : "/usr/bin/ffmpeg",
     "ffprobe_bin" : "/usr/bin/ffprobe",
     "tmp_folder" : "/tmp",
